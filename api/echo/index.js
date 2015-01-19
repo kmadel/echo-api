@@ -84,6 +84,7 @@ Echo.prototype.parseTasks = function() {
     var api = self.apis[i];
     for(var j in tasks) {
       var task = tasks[j];
+			console.log("Ech api parseTasks - task: " + task.text);
       tasks[j] = api.parse(task);
     }
   }
