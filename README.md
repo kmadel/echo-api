@@ -1,7 +1,7 @@
 # amazon-echo-api
 
 This is (almost, kind of) an API for Amazon
-Echo. [Video Demonstration][youtube]
+Echo.
 
 **This code is not for the faint of heart.** I wrote it in about three
 hours, the day after I got my Echo, and there are a lot of
@@ -12,16 +12,7 @@ owners.
 
 ## Prerequisites
 
-- **Wolfram Alpha API Key:** this is used for converting the
-  plain-text numbers that Echo records (e.g., "seventy three") into
-  integers that can be used to set the temperature. Maybe there's
-  another Node package out there to do this, but this seemed like the
-  easiest way to get it working. [Get a key here.][wolfram]
-- **Username for your Hue:** if you're not messing with Hue, then
-  don't worry about it. This was pretty easy to do in the Node REPL by
-  loading [node-hue-api][hue-api] and just typing in the
-  commands. Later versions of this app should generate a new username
-  (assuming it doesn't have one saved) and save it for use later.
+- **Connected by TCP Hub:** for control of Connected by TCP bulbs.
 
 ## Amazon Echo Credentials
 
@@ -50,10 +41,7 @@ do the following:
 
 ## Other Credentials
 
-Other credentials are located in `api/nest/.credentials.json` and
-`api/hue/.credentials.json`. Your Nest credentials are the same ones
-you use to log in to the app, and the username for Hue is explained
-above (in "Prerequisites").
+Other credentials are located in `api/itunes/.credentials.json`.
 
 ## Running the App
 
@@ -67,15 +55,9 @@ the app is really just two steps:
 
 - actual Amazon login (rather than this cookie hack)
 - better credential management overall
-- look for a better way of converting "seventy three" to 73
-- automatic creation of usernames for Hue (should be trivial, but it
-  would be good to add it)
 - "global" commands (that don't require a prefix)
 - maybe get rid of the whole prefix idea altogether
 - "scenes" (tasks that can call subtasks; i.e., set the lights *and*
   temperature)
 
 
-[wolfram]: https://developer.wolframalpha.com/portal/apisignup.html
-[hue-api]: https://github.com/peter-murray/node-hue-api
-[youtube]: https://www.youtube.com/watch?v=0I3E-auy8JA
