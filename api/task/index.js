@@ -14,11 +14,20 @@ Task.prototype.register = function(phrase, callback) {
     regex: regex,
     callback: callback
   });
+	var regex2 = new RegExp('alexa ' + phrase);
+  self.commands.push({
+    regex: regex2,
+    callback: callback
+  });
 };
 
 Task.prototype.parse = function(task) {
   var self = this;
-  var string = task.text.toLowerCase();
+	if(!task.description) {
+	  return task;
+	}
+  var activityDesc = JSON.parse(task.description);
+  var string = activityDesc.summary.toLowerCase();
   // filter on matches
   var matches = self.commands.filter(function(command) {
     return command.regex.test(string);
@@ -31,10 +40,16 @@ Task.prototype.parse = function(task) {
   var command = matches[0];
   var results = command.regex.exec(string);
   // there is almost definitely a better way to do this.
+	console.log("command: " + results[0]);
   var params = results[1];
   console.log('Executing: %s', string);
   command.callback.call(self, params);
   task.executed = true;
+	var re = new RegExp( self.prefix, "i" );
+  if ( re.test('itunes')) {
+    task['mediaStop'] = true;
+  }
+	console.log("task string: " + JSON.stringify(task));
   return task;
 }
 

@@ -2,7 +2,7 @@ var Task = require('../task');
 var TCPConnected = require('./node-tcp');
 var TcpTask = function() {
   var self = this;
-  Task.call(self, 'lighting');
+  Task.call(self, 'lights');
   self.bridge = null;
   self.api = null;
   self.lights = null;

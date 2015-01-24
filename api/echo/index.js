@@ -2,7 +2,13 @@ var Echo = function() {
   var self = this;
   self.credentials = require('./.credentials');
   self.domain = 'https://pitangui.amazon.com';
-  self.tasksToFetch = 100;
+	self.deviceType = 'AB72C64C86AW2';
+	self.deviceSerialNumber = 'B0F00712446401G7';
+	var deviceInfo = {};
+	deviceInfo['deviceType'] = self.deviceType;
+	deviceInfo['deviceSerialNumber'] = self.deviceSerialNumber;
+	self.deviceInfo = deviceInfo;
+  self.tasksToFetch = 5;
   self.apis = [];
   self.tasks = [];
 };
@@ -39,7 +45,9 @@ Echo.prototype.request = function(api, method, params, data, callback) {
       callback.call(self, body);
     } else {
       console.log('err!');
-      console.log(err, res.statusCode, body);
+			if(res && res.statusCode) {
+        console.log(err, res.statusCode, body);
+		  }
     }
   });
 };
@@ -49,20 +57,26 @@ Echo.prototype.get = function(api, params, callback) {
   self.request(api, 'GET', params, null, callback);
 };
 
-Echo.prototype.put = function(api, params, data, callback) {
+Echo.prototype.post = function(api, params, data, callback) {
   var self = this;
-  self.request(api, 'PUT', params, data, callback);
+  self.request(api, 'POST', params, data, callback);
+};
+
+Echo.prototype.delete = function(api, params, data, callback) {
+  var self = this;
+  self.request(api, 'DELETE', params, data, callback);
 };
 
 Echo.prototype.fetchTasks = function() {
   var self = this;
   self.busy = true;
-  self.get('todos', {
-    type: 'TASK',
+  self.get('activities', {
+    startTime:'',
+		offset: 1,
     size: self.tasksToFetch
   }, function(body) {
     var json = JSON.parse(body);
-    var tasks = json.values;
+    var tasks = json.activities;
 
     var oldStr = JSON.stringify(self.tasks);
     var newStr = JSON.stringify(tasks);
@@ -84,7 +98,6 @@ Echo.prototype.parseTasks = function() {
     var api = self.apis[i];
     for(var j in tasks) {
       var task = tasks[j];
-			console.log("Ech api parseTasks - task: " + task.text);
       tasks[j] = api.parse(task);
     }
   }
@@ -101,10 +114,16 @@ Echo.prototype.cleanupTasks = function(tasks) {
 
   for(var i in cleanup) {
     var task = cleanup[i];
+		if(task.mediaStop) {
+			console.log('mediaStop set to true')
+			self.post('media/stop', null, self.deviceInfo,function(res) {
+      // TODO maybe put something here
+    });
+		}
     task.deleted = true;
     delete task.executed;
-    console.log('Deleting: %s', task.text);
-    self.put('todos/' + task.itemId, null, task, function(res) {
+    console.log('Deleting: %s', task.id);
+    self.delete('activities/' + encodeURIComponent(task.id), null, task, function(res) {
       // TODO maybe put something here
     });
   }
