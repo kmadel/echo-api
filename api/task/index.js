@@ -27,6 +27,9 @@ Task.prototype.parse = function(task) {
 	  return task;
 	}
   var activityDesc = JSON.parse(task.description);
+	if(!activityDesc.summary) {
+		return task;
+	}
   var string = activityDesc.summary.toLowerCase();
   // filter on matches
   var matches = self.commands.filter(function(command) {

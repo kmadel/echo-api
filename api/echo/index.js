@@ -44,7 +44,7 @@ Echo.prototype.request = function(api, method, params, data, callback) {
     if(!err && res.statusCode == 200) {
       callback.call(self, body);
     } else {
-      console.log('err!');
+      console.log('error: ' + err);
 			if(res && res.statusCode) {
         console.log(err, res.statusCode, body);
 		  }
