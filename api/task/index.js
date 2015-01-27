@@ -45,7 +45,7 @@ Task.prototype.parse = function(task) {
   // there is almost definitely a better way to do this.
 	console.log("command: " + results[0]);
   var params = results[1];
-  console.log('Executing: %s', string);
+  console.log('Executing: %s with params: %s', string, params);
   command.callback.call(self, params);
   task.executed = true;
 	var re = new RegExp( self.prefix, "i" );

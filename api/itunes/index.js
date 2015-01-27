@@ -14,6 +14,8 @@ var iTunesTask = function() {
   self.register('pause', self.pause);
   self.register('stop', self.pause);
   self.register('next', self.next);
+  self.register('up', self.volumeup);
+  self.register('down', self.volumedown);
 };
 iTunesTask.prototype = Object.create(Task.prototype);
 iTunesTask.prototype.constructor = iTunesTask;
@@ -40,7 +42,7 @@ iTunesTask.prototype.pause = function() {
   self.api.login(function (error, response) {
   	sessionId = response['dmap.loginresponse']['dmap.sessionid'];
 		console.log("daap sessionId: " + sessionId);
-    self.api.pause(sessionId, function (error, response) {
+    self.api.stop(sessionId, function (error, response) {
         //check error/response
     });
 	});
@@ -53,6 +55,30 @@ iTunesTask.prototype.next = function() {
   	sessionId = response['dmap.loginresponse']['dmap.sessionid'];
 		console.log("daap sessionId: " + sessionId);
     self.api.nextitem(sessionId, function (error, response) {
+        //check error/response
+    });
+	});
+};
+
+iTunesTask.prototype.volumeup = function() {
+	console.log("iTunesTask volumeup");
+  var self = this;
+  self.api.login(function (error, response) {
+  	sessionId = response['dmap.loginresponse']['dmap.sessionid'];
+		console.log("daap sessionId: " + sessionId);
+    self.api.volumeup(sessionId, function (error, response) {
+        //check error/response
+    });
+	});
+};
+
+iTunesTask.prototype.volumedown = function() {
+	console.log("iTunesTask volumedown");
+  var self = this;
+  self.api.login(function (error, response) {
+  	sessionId = response['dmap.loginresponse']['dmap.sessionid'];
+		console.log("daap sessionId: " + sessionId);
+    self.api.volumedown(sessionId, function (error, response) {
         //check error/response
     });
 	});
